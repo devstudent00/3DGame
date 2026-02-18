@@ -11,10 +11,6 @@ Player::Player()
 
 	int root = MV1SearchFrame(hModel, "root");
 	MV1SetFrameUserLocalMatrix(hModel, root, MGetRotY(DX_PI_F));
-
-	postion = VECTOR3(0, 0, 0);
-	rotation = VECTOR3(0, 0, 0);
-	velocity = VECTOR3(0, 0, 0);
 }
 
 Player::~Player()
@@ -59,11 +55,4 @@ void Player::Update()
 	VECTOR3 cameraPos = playerCameraPos * rotationMat + postion; 
 	VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
-}
-
-void Player::Draw()
-{
-	MV1SetRotationXYZ(hModel, rotation);
-	MV1SetPosition(hModel, postion);
-	MV1DrawModel(hModel); 
 }
