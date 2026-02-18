@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <DxLib.h>
 #include <assert.h>
+#include "Stage.h"
 
 Player::Player()
 {
@@ -35,16 +36,25 @@ void Player::Update()
 		//postion.z += (5.0f * cosf(rotation.y));
 
 		//velocity = VECTOR3(x, 0, z);
-		velocity = VECTOR3(0, 0, 3.0) * MGetRotY(rotation.y);
+		velocity = VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y);
 		//         ↑回っていないときの移動ベクトル * 回転行列
 		postion += velocity;
 	}
 	if (CheckHitKey(KEY_INPUT_S)) {
 		//postion.x -= (5.0f * sinf(rotation.y));
 		//postion.z -= (5.0f * cosf(rotation.y));
-		velocity = VECTOR3(0, 0, -3.0f) * MGetRotY(rotation.y);
+		velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
 		postion += velocity;
 	}
+
+	//const float JUMP = 15;
+	//const float gravity = 1.0f;
+
+	//if (CheckHitKey(KEY_INPUT_SPACE)) {
+	//	velocity.y = 15;
+	//}
+	//postion.y -= velocity.y;
+	//velocity.y -= gravity;
 
 	//SetCameraPositionAndTarget_UpVecY(VECTOR3(0, 350, -500), VECTOR3(0, 250, 0));
 
@@ -55,4 +65,12 @@ void Player::Update()
 	VECTOR3 cameraPos = playerCameraPos * rotationMat + postion; 
 	VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+
+	//地面との当たり判定
+	Stage* stage = FindGameObject<Stage>();
+	VECTOR3 hitPos;
+	if (stage->CollideRay(postion + VECTOR3(0, 1000, 0), postion + VECTOR3(0, -1000, 0), &hitPos)) {
+		postion = hitPos; //当たってら、位置を当たった場所にする
+	}
+
 }

@@ -17,7 +17,12 @@ Object3D::~Object3D()
 }
 
 void Object3D::Draw() {
-	MV1SetRotationXYZ(hModel, rotation);
-	MV1SetPosition(hModel, postion);
+	//MV1SetRotationXYZ(hModel, rotation);
+	//MV1SetPosition(hModel, postion);
+
+	MATRIX mRotY = MGetRotY(rotation.y);
+	MATRIX mTrans = MGetTranslate(postion);
+	MATRIX mat = mRotY * mTrans;
+	MV1SetMatrix(hModel, mat);
 	MV1DrawModel(hModel);
 }

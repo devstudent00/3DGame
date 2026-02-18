@@ -10,4 +10,5 @@ public:
 	~Stage();
 	void Update() override;
 	void Draw() override;
+	bool CollideRay(VECTOR3 start, VECTOR3 end, VECTOR3* hit);
 };

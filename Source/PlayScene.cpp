@@ -31,11 +31,18 @@ void PlayScene::Draw()
 
 	if (debug) {
 		Player* player = ObjectManager::FindGameObject<Player>();
+		VECTOR3 newRot = player->GetRotation();
+		float newRotX = newRot.x;
+		static float newRotY = newRot.y;
+		float newRotZ = newRot.z;
 		
 		ImGui::Begin("Debug");
 		ImGui::Text("Player Position: (%.2f, %.2f, %.2f)", player->GetPosition().x, player->GetPosition().y, player->GetPosition().z);
 		ImGui::Text("Player Rotation: (%.2f, %.2f, %.2f)", player->GetRotation().x, player->GetRotation().y, player->GetRotation().z);
+		//ImGui::SliderFloat("RotationY", &newRotY, 0, 360);
 		ImGui::Text("Player Velocity: (%.2f, %.2f, %.2f)", player->GetVelocity().x, player->GetVelocity().y, player->GetVelocity().z);
 		ImGui::End();
+
+		//player->SetRotation();
 	}
 }
