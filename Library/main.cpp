@@ -44,6 +44,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetAlwaysRunFlag(TRUE);
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
+	ChangeFontType(DX_FONTTYPE_ANTIALIASING_16X16);
 
 	SetHookWinProc([](HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) -> LRESULT /*CALLBACK*/
 	{

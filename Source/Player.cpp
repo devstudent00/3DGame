@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <assert.h>
 #include "Stage.h"
+#include "ChatUI.h"
 
 Player::Player()
 {
@@ -21,31 +22,35 @@ Player::~Player()
 void Player::Update()
 {
 	//
-	if (CheckHitKey(KEY_INPUT_D)) {
-		rotation.y += 3.0f * DegToRad;
-	}
-	if (CheckHitKey(KEY_INPUT_A)) {
-		rotation.y -= 3.0f * DegToRad;
+	ChatUI* chatUI = FindGameObject<ChatUI>();
+	if (!chatUI->IsShowing()) {
+		if (CheckHitKey(KEY_INPUT_D)) {
+			rotation.y += 3.0f * DegToRad;
+		}
+		if (CheckHitKey(KEY_INPUT_A)) {
+			rotation.y -= 3.0f * DegToRad;
+		}
+
+		const float speed = 5.0f;
+		float x = speed * sinf(rotation.y) * Time::DeltaTime();
+		float z = speed * cosf(rotation.y) * Time::DeltaTime();
+		if (CheckHitKey(KEY_INPUT_W)) {
+			//postion.x += (5.0f * sinf(rotation.y)); 
+			//postion.z += (5.0f * cosf(rotation.y));
+
+			//velocity = VECTOR3(x, 0, z);
+			velocity = VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y);
+			//         ↑回っていないときの移動ベクトル * 回転行列
+			postion += velocity;
+		}
+		if (CheckHitKey(KEY_INPUT_S)) {
+			//postion.x -= (5.0f * sinf(rotation.y));
+			//postion.z -= (5.0f * cosf(rotation.y));
+			velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
+			postion += velocity;
+		}
 	}
 
-	const float speed = 5.0f;
-	float x = speed * sinf(rotation.y) * Time::DeltaTime(); 
-	float z = speed * cosf(rotation.y) * Time::DeltaTime();
-	if (CheckHitKey(KEY_INPUT_W)) {
-		//postion.x += (5.0f * sinf(rotation.y)); 
-		//postion.z += (5.0f * cosf(rotation.y));
-
-		//velocity = VECTOR3(x, 0, z);
-		velocity = VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y);
-		//         ↑回っていないときの移動ベクトル * 回転行列
-		postion += velocity;
-	}
-	if (CheckHitKey(KEY_INPUT_S)) {
-		//postion.x -= (5.0f * sinf(rotation.y));
-		//postion.z -= (5.0f * cosf(rotation.y));
-		velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
-		postion += velocity;
-	}
 
 	//const float JUMP = 15;
 	//const float gravity = 1.0f;

@@ -1,11 +1,14 @@
 #include "Stage.h"
 #include <cassert>
+#include "ChatUI.h"
 
 Stage::Stage()
 {
 	hModel = MV1LoadModel("data/models/Stage/Stage00.mv1");
 	assert(hModel > 0);
 	MV1SetupCollInfo(hModel, -1);
+
+	new ChatUI("Player");
 }
 
 Stage::~Stage()

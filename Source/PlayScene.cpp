@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Stage.h"
 #include "../ImGui/imgui.h"
+#include "ChatUI.h"
 
 namespace {
 	bool debug = true;
@@ -31,6 +32,7 @@ void PlayScene::Draw()
 
 	if (debug) {
 		Player* player = ObjectManager::FindGameObject<Player>();
+		ChatUI* chatUI = ObjectManager::FindGameObject<ChatUI>();
 		VECTOR3 newRot = player->GetRotation();
 		float newRotX = newRot.x;
 		static float newRotY = newRot.y;
@@ -41,6 +43,7 @@ void PlayScene::Draw()
 		ImGui::Text("Player Rotation: (%.2f, %.2f, %.2f)", player->GetRotation().x, player->GetRotation().y, player->GetRotation().z);
 		//ImGui::SliderFloat("RotationY", &newRotY, 0, 360);
 		ImGui::Text("Player Velocity: (%.2f, %.2f, %.2f)", player->GetVelocity().x, player->GetVelocity().y, player->GetVelocity().z);
+		ImGui::SliderInt(u8"チャットのフォントの大きさ", &chatUI->CHATFONT_SIZE, 1, 50);
 		ImGui::End();
 
 		//player->SetRotation();
