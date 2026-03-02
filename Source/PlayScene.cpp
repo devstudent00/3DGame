@@ -3,6 +3,7 @@
 #include "Stage.h"
 #include "../ImGui/imgui.h"
 #include "ChatUI.h"
+#include "Screen.h"
 
 namespace {
 	bool debug = true;
@@ -12,6 +13,8 @@ PlayScene::PlayScene()
 {
 	new Stage();
 	new Player();
+	isPause = false;
+	mouseVec = VECTOR3(0, 0, 0);
 }
 
 PlayScene::~PlayScene()
@@ -20,15 +23,30 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
+	static int beforeMouseX = 0;
+	static int beforeMouseY = 0;
+	
+	GetMousePoint(&beforeMouseX, &beforeMouseY);
+	mouseVec.x = beforeMouseX - Screen::WIDTH / 2;
+	mouseVec.y = beforeMouseY - Screen::HEIGHT / 2;
+
 	if (Input::IsKeyOnTrig(KEY_INPUT_T)) {
 		SceneManager::ChangeScene("TITLE");
 	}
+	if (Input::IsKeyOnTrig(KEY_INPUT_ESCAPE)) {
+		isPause = !isPause;
+	}
+
+	beforeMouseX = Screen::WIDTH / 2;
+	beforeMouseY = Screen::HEIGHT / 2;
 }
 
 void PlayScene::Draw()
 {
 	DrawString(0, 0, "PLAY SCENE", COL_WHITE);
 	DrawString(100, 400, "Push [T]Key To Title", COL_WHITE);
+
+	DrawFormatString(0, 100, GetColor(255, 255, 255), "Mouse Vec: (%.2f %.2f)", GetMouseVec().x, GetMouseVec().y);
 
 	if (debug) {
 		Player* player = ObjectManager::FindGameObject<Player>();

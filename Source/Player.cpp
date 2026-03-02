@@ -3,6 +3,8 @@
 #include <assert.h>
 #include "Stage.h"
 #include "ChatUI.h"
+#include "PlayScene.h"
+#include "Screen.h"
 
 Player::Player()
 {
@@ -21,16 +23,25 @@ Player::~Player()
 
 void Player::Update()
 {
-	//
+	PlayScene* playScene = (PlayScene*) SceneManager::CurrentScene();
+	if (playScene->IsPause()) return;
+	VECTOR3 mouseVec = playScene->GetMouseVec();
+	
 	ChatUI* chatUI = FindGameObject<ChatUI>();
 	if (!chatUI->IsShowing()) {
-		if (CheckHitKey(KEY_INPUT_D)) {
+		//if (CheckHitKey(KEY_INPUT_D)) {
+		//	rotation.y += 3.0f * DegToRad;
+		//}
+		//if (CheckHitKey(KEY_INPUT_A)) {
+		//	rotation.y -= 3.0f * DegToRad;
+		//}
+		if (mouseVec.x > 0) {
 			rotation.y += 3.0f * DegToRad;
 		}
-		if (CheckHitKey(KEY_INPUT_A)) {
+		else if (mouseVec.x < 0) {
 			rotation.y -= 3.0f * DegToRad;
 		}
-
+		
 		const float speed = 5.0f;
 		float x = speed * sinf(rotation.y) * Time::DeltaTime();
 		float z = speed * cosf(rotation.y) * Time::DeltaTime();
@@ -66,9 +77,13 @@ void Player::Update()
 	//カメラ位置は、回ってないプレイヤーとの相対位置 * プレイヤーの回転 + プレイヤーの位置
 
 	VECTOR3 playerCameraPos = VECTOR3(0, 350, -600); //相対位置：プレイヤー - (0, 350, -600)
-	MATRIX rotationMat = MGetRotY(rotation.y); //回転行列
-	VECTOR3 cameraPos = playerCameraPos * rotationMat + postion; 
-	VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
+	MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
+	MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
+	// MATRIX rotationMat = rotationMatY * rotationMatX; 
+	MATRIX rotationMat = rotationMatY;
+	VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
+	// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
+	VECTOR3 targetPos = VECTOR3(0, 250, 0) * rotationMat + postion;
 	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 
 	//地面との当たり判定
@@ -78,4 +93,5 @@ void Player::Update()
 		postion = hitPos; //当たってら、位置を当たった場所にする
 	}
 
+	SetMousePoint(Screen::WIDTH / 2, Screen::HEIGHT / 2);
 }
