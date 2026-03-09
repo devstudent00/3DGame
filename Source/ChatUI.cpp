@@ -12,6 +12,7 @@ ChatUI::ChatUI(std::string playerName) {
 	isShowing = false;
 	inputHandle = MakeKeyInput(50, FALSE, FALSE, FALSE);
 	playerName_ = playerName;
+	SetDrawOrder(-1000);
 }
 
 ChatUI::~ChatUI() {

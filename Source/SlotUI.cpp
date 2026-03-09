@@ -7,6 +7,7 @@ namespace {
 
 SlotUI::SlotUI() {
 	selectSlot = 0;
+	SetDrawOrder(-900);
 }
 
 SlotUI::~SlotUI() {
