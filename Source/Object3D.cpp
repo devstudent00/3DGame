@@ -20,9 +20,12 @@ void Object3D::Draw() {
 	//MV1SetRotationXYZ(hModel, rotation);
 	//MV1SetPosition(hModel, postion);
 
+	MATRIX mRotX = MGetRotX(rotation.x);
 	MATRIX mRotY = MGetRotY(rotation.y);
+	MATRIX mRotZ = MGetRotZ(rotation.z);
 	MATRIX mTrans = MGetTranslate(postion);
-	MATRIX mat = mRotY * mTrans;
+	// MATRIX mat = mRotY * mTrans;
+	MATRIX mat = mRotZ * mRotY * mRotX * mTrans;
 	MV1SetMatrix(hModel, mat);
 	MV1DrawModel(hModel);
 }

@@ -4,6 +4,7 @@
 #include "../ImGui/imgui.h"
 #include "ChatUI.h"
 #include "Screen.h"
+#include "Axe.h"
 
 namespace {
 	bool debug = true;
@@ -13,6 +14,7 @@ PlayScene::PlayScene()
 {
 	new Stage();
 	new Player();
+	new Axe();
 	isPause = false;
 	mouseVec = VECTOR3(0, 0, 0);
 }
