@@ -5,6 +5,7 @@
 
 class Player : public Object3D {
 private:
+	int cameraSelect = 0;
 public:
 	Player();
 	~Player();

@@ -60,6 +60,10 @@ void Player::Update()
 			velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
 			postion += velocity;
 		}
+
+		if (Input::IsKeyOnTrig(KEY_INPUT_F5)) {
+			cameraSelect = !cameraSelect;
+		}
 	}
 
 
@@ -76,15 +80,31 @@ void Player::Update()
 
 	//カメラ位置は、回ってないプレイヤーとの相対位置 * プレイヤーの回転 + プレイヤーの位置
 
-	VECTOR3 playerCameraPos = VECTOR3(0, 350, -600); //相対位置：プレイヤー - (0, 350, -600)
-	MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
-	MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
-	// MATRIX rotationMat = rotationMatY * rotationMatX; 
-	MATRIX rotationMat = rotationMatY;
-	VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
-	// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
-	VECTOR3 targetPos = VECTOR3(0, 250, 0) * rotationMat + postion;
-	SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	if (cameraSelect) {
+		// 3人称視点
+		VECTOR3 playerCameraPos = VECTOR3(0, 350, -600); //相対位置：プレイヤー - (0, 350, -600)
+		MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
+		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
+		// MATRIX rotationMat = rotationMatY * rotationMatX; 
+		MATRIX rotationMat = rotationMatY;
+		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
+		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
+		VECTOR3 targetPos = VECTOR3(0, 250, 0) * rotationMat + postion;
+		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	}
+	else {
+		// 1人称視点
+		VECTOR3 playerCameraPos = VECTOR3(0, 150, 50); //相対位置：プレイヤー - (0, 350, -600)
+		MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
+		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
+		// MATRIX rotationMat = rotationMatY * rotationMatX; 
+		MATRIX rotationMat = rotationMatY;
+		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
+		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
+		VECTOR3 targetPos = VECTOR3(0, 150, 100) * rotationMat + postion;
+		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	}
+
 
 	//地面との当たり判定
 	Stage* stage = FindGameObject<Stage>();
