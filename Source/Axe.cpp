@@ -11,7 +11,7 @@ Axe::Axe()
 	hModel = MV1LoadModel("data/models/Character/Weapon/Axe/Axe.mv1");
 	assert(hModel > 0);
 	MV1SetupCollInfo(hModel, -1);
-	pickTime = 10;
+	pickTime = 2;
 }
 
 Axe::Axe(VECTOR3 location)
@@ -20,7 +20,7 @@ Axe::Axe(VECTOR3 location)
 	hModel = MV1LoadModel("data/models/Character/Weapon/Axe/Axe.mv1");
 	postion = location;
 	MV1SetupCollInfo(hModel, -1);
-	pickTime = 10;
+	pickTime = 2;
 }
 
 Axe::~Axe()

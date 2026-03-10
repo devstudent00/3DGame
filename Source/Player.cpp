@@ -6,6 +6,7 @@
 #include "PlayScene.h"
 #include "Screen.h"
 #include "Axe.h"
+#include "SlotUI.h"
 
 namespace {
 	static const float LIMIT_ROTATION = 50.0f;
@@ -99,11 +100,13 @@ void Player::Update()
 
 		if (Input::IsKeyOnTrig(KEY_INPUT_Q)) {
 			// アイテムを消す
-			for (int i = 0; i < hasItemIdVector.size(); i++) {
-				hasItemIdVector[i] = -1;
+			SlotUI* slotUI = FindGameObject<SlotUI>();
+			int selectSlot = slotUI->GetSelectSlot();
+			if (0 <= selectSlot && selectSlot <= MAX_SLOT) {
+				if (hasItemIdVector[selectSlot] == -1) return;
+				hasItemIdVector[selectSlot] = -1;
 				// ドロップの描画
-				new Axe();
-				
+				new Axe(postion);
 			}
 		}
 	}

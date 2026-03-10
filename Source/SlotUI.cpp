@@ -2,10 +2,6 @@
 #include "Screen.h"
 #include "Player.h"
 
-namespace {
-	const int MAX_SLOT = 5;
-}
-
 SlotUI::SlotUI() {
 	selectSlot = 0;
 	SetDrawOrder(-900);
