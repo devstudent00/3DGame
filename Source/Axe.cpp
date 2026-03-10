@@ -1,5 +1,6 @@
 #include "Axe.h"
 #include <cassert>
+#include <cmath>
 #include "Stage.h"
 #include "../ImGui/imgui.h"
 #include "Player.h"
@@ -44,7 +45,8 @@ void Axe::Update()
 	}
 
 	Player* player = FindGameObject<Player>();
-	if (player->CollideRay(postion + VECTOR3(0, 50, 0), postion + VECTOR3(0, -50, 0), &hitPos) && pickTime <= 0.0f) {
+	float distanceToPlayer = VSize(player->GetPosition() - postion);
+	if (distanceToPlayer <= 100.0f && pickTime <= 0.0f) { 
 		// アイテムを取得
 		player->AddItem(ITEM_ID);
 		// アイテムを消す
@@ -54,5 +56,6 @@ void Axe::Update()
 
 	ImGui::Begin("Axe Info");
 	ImGui::Text("Position: (%.2f, %.2f, %.2f)", postion.x, postion.y, postion.z);
+	ImGui::Text("Distance: %.2f", distanceToPlayer);
 	ImGui::End();
 }
