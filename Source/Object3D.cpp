@@ -31,3 +31,15 @@ void Object3D::Draw() {
 	MV1SetMatrix(hModel, mat);
 	MV1DrawModel(hModel);
 }
+
+bool Object3D::CollideRay(VECTOR3 start, VECTOR3 end, VECTOR3* hit) {
+
+	MV1_COLL_RESULT_POLY result = MV1CollCheck_Line(hModel, -1, start, end);
+	if (result.HitFlag > 0) {
+		if (hit != nullptr) {
+			*hit = result.HitPosition;
+		}
+		return true;
+	}
+	return false;
+}

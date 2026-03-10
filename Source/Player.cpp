@@ -5,6 +5,7 @@
 #include "ChatUI.h"
 #include "PlayScene.h"
 #include "Screen.h"
+#include "Axe.h"
 
 namespace {
 	static const float LIMIT_ROTATION = 50.0f;
@@ -19,8 +20,14 @@ Player::Player()
 
 	int root = MV1SearchFrame(hModel, "root");
 	MV1SetFrameUserLocalMatrix(hModel, root, MGetRotY(DX_PI_F));
+	MV1SetupCollInfo(hModel, -1);
 
 	cameraRotationVec = VECTOR3(0, 0, 0);
+
+	hasItemIdVector = std::vector<int>();
+	for (int i = 0; i < 5; i++) {
+		hasItemIdVector.push_back(-1);
+	}
 }
 
 Player::~Player()
@@ -89,6 +96,16 @@ void Player::Update()
 		if (Input::IsKeyOnTrig(KEY_INPUT_F5)) {
 			cameraSelect = !cameraSelect;
 		}
+
+		if (Input::IsKeyOnTrig(KEY_INPUT_Q)) {
+			// アイテムを消す
+			for (int i = 0; i < hasItemIdVector.size(); i++) {
+				hasItemIdVector[i] = -1;
+				// ドロップの描画
+				new Axe();
+				
+			}
+		}
 	}
 
 
@@ -119,7 +136,7 @@ void Player::Update()
 		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 	}
 	else {
-		canDraw = false; 
+		canDraw = false;
 		// 1人称視点
 		VECTOR3 playerCameraPos = VECTOR3(0, 150, 50); //相対位置：プレイヤー - (0, 350, -600)
 		MATRIX rotationMatX = MGetRotX(cameraRotationVec.x); //回転行列
@@ -141,4 +158,38 @@ void Player::Update()
 	}
 
 	SetMousePoint(Screen::WIDTH / 2, Screen::HEIGHT / 2);
+}
+
+void Player::AddItem(int itemID)
+{
+	for (int i = 0; i < hasItemIdVector.size(); i++) {
+		if (hasItemIdVector[i] == -1) {
+			hasItemIdVector[i] = itemID;
+			return;
+		}
+	}
+}
+
+void Player::RemoveItem(int itemID)
+{
+	auto it = std::find(hasItemIdVector.begin(), hasItemIdVector.end(), itemID);
+	if (it != hasItemIdVector.end()) { //ある（最後のイテレータじゃない）場合は追加
+		hasItemIdVector.erase(it);
+	}
+}
+
+bool Player::HasItem(int itemID) const
+{
+	if (std::find(hasItemIdVector.begin(), hasItemIdVector.end(), itemID) != hasItemIdVector.end()) { //ある（最後のイテレータじゃない）場合は追加
+		return true;
+	}
+	return false;
+}
+
+int Player::GetItem(int index) const
+{
+	if (index >= 0 && index < hasItemIdVector.size()) {
+		return hasItemIdVector[index];
+	}
+	return -1;
 }

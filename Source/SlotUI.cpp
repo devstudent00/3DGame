@@ -1,5 +1,6 @@
 #include "SlotUI.h"
 #include "Screen.h"
+#include "Player.h"
 
 namespace {
 	const int MAX_SLOT = 5;
@@ -8,6 +9,7 @@ namespace {
 SlotUI::SlotUI() {
 	selectSlot = 0;
 	SetDrawOrder(-900);
+	axe = MV1LoadModel("data/models/Character/Weapon/Axe/Axe.mv1");
 }
 
 SlotUI::~SlotUI() {
@@ -42,6 +44,17 @@ void SlotUI::Draw() {
 	int selectLeftX = leftX + (oneSlotSize * (selectSlot)); //例：左の座標 + (1個の幅*0～4)
 	int selectRightX = leftX + (oneSlotSize * (selectSlot + 1)); //例（右は1個隣の左座標）： 左の座標 + (1この幅*1～5)
 	DrawBox(selectLeftX, leftY, selectRightX, rightY, GetColor(255, 255, 255), false);
+
+	// アイテムを描画
+	// 例：左の座標 + (1個の幅*0～4) + (1個の幅/2) - (アイテムの大きさ/2)
+	for (int i = 0; i < MAX_SLOT; i++) {
+		Player* player = FindGameObject<Player>();
+		if (player->GetItem(i) == 1) {
+			int itemX = leftX + (oneSlotSize * i) + (oneSlotSize / 2) - 25;
+			int itemY = leftY + (sizeY / 2) - 25;
+			DrawCircle(itemX, itemY, 25, GetColor(255, 0, 0), true);
+		}
+	}
 
 	//アイテムの仕切りを描画
 	int itemNum = 5;

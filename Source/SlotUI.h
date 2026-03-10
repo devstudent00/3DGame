@@ -4,6 +4,7 @@
 class SlotUI : public GameObject {
 private:
 	int selectSlot;
+	int axe;
 public:
 	SlotUI();
 	~SlotUI();

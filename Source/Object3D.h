@@ -21,4 +21,6 @@ public:
 	void SetRotation(const VECTOR3& rot) { rotation = rot; }
 	VECTOR3 GetVelocity() const { return velocity; }
 	void SetVelocity(const VECTOR3& vel) { velocity = vel; }
+
+	bool CollideRay(VECTOR3 start, VECTOR3 end, VECTOR3* hit);
 };
