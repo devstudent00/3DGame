@@ -8,6 +8,7 @@ protected:
 	VECTOR3 postion;
 	VECTOR3 rotation;
 	VECTOR3 velocity;
+	bool canDraw;
 public:
 	Object3D();
 	virtual ~Object3D();

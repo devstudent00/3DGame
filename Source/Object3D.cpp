@@ -6,6 +6,7 @@ Object3D::Object3D()
 	postion = VECTOR3(0, 0, 0);
 	rotation = VECTOR3(0, 0, 0);
 	velocity = VECTOR3(0, 0, 0);
+	canDraw = true;
 }
 
 Object3D::~Object3D()
@@ -17,6 +18,7 @@ Object3D::~Object3D()
 }
 
 void Object3D::Draw() {
+	if (!canDraw) return; 
 	//MV1SetRotationXYZ(hModel, rotation);
 	//MV1SetPosition(hModel, postion);
 

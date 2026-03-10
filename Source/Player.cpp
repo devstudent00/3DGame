@@ -7,7 +7,7 @@
 #include "Screen.h"
 
 namespace {
-	static const float LIMIT_ROTATION = 0.0f;
+	static const float LIMIT_ROTATION = 50.0f;
 }
 
 Player::Player()
@@ -106,6 +106,7 @@ void Player::Update()
 	//カメラ位置は、回ってないプレイヤーとの相対位置 * プレイヤーの回転 + プレイヤーの位置
 
 	if (cameraSelect) {
+		canDraw = true;
 		// 3人称視点
 		VECTOR3 playerCameraPos = VECTOR3(0, 350, -600); //相対位置：プレイヤー - (0, 350, -600)
 		MATRIX rotationMatX = MGetRotX(cameraRotationVec.x); //回転行列
@@ -118,6 +119,7 @@ void Player::Update()
 		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
 	}
 	else {
+		canDraw = false; 
 		// 1人称視点
 		VECTOR3 playerCameraPos = VECTOR3(0, 150, 50); //相対位置：プレイヤー - (0, 350, -600)
 		MATRIX rotationMatX = MGetRotX(cameraRotationVec.x); //回転行列
