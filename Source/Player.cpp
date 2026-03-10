@@ -6,6 +6,10 @@
 #include "PlayScene.h"
 #include "Screen.h"
 
+namespace {
+	static const float LIMIT_ROTATION = 0.0f;
+}
+
 Player::Player()
 {
 	//SetCameraPositionAndTarget_UpVecY(poston, target);
@@ -15,6 +19,8 @@ Player::Player()
 
 	int root = MV1SearchFrame(hModel, "root");
 	MV1SetFrameUserLocalMatrix(hModel, root, MGetRotY(DX_PI_F));
+
+	cameraRotationVec = VECTOR3(0, 0, 0);
 }
 
 Player::~Player()
@@ -36,10 +42,29 @@ void Player::Update()
 		//	rotation.y -= 3.0f * DegToRad;
 		//}
 		if (mouseVec.x > 0) {
+			cameraRotationVec.y += 3.0f * DegToRad;
 			rotation.y += 3.0f * DegToRad;
 		}
 		else if (mouseVec.x < 0) {
+			cameraRotationVec.y -= 3.0f * DegToRad;
 			rotation.y -= 3.0f * DegToRad;
+		}
+
+		if (mouseVec.y > 0) {
+			if (cameraRotationVec.x > LIMIT_ROTATION * DegToRad) {
+				cameraRotationVec.x = LIMIT_ROTATION * DegToRad;
+			}
+			else {
+				cameraRotationVec.x += 3.0f * DegToRad;
+			}
+		}
+		else if (mouseVec.y < 0) {
+			if (cameraRotationVec.x < -LIMIT_ROTATION * DegToRad) {
+				cameraRotationVec.x = -LIMIT_ROTATION * DegToRad;
+			}
+			else {
+				cameraRotationVec.x -= 3.0f * DegToRad;
+			}
 		}
 		
 		const float speed = 5.0f;
@@ -83,10 +108,10 @@ void Player::Update()
 	if (cameraSelect) {
 		// 3人称視点
 		VECTOR3 playerCameraPos = VECTOR3(0, 350, -600); //相対位置：プレイヤー - (0, 350, -600)
-		MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
+		MATRIX rotationMatX = MGetRotX(cameraRotationVec.x); //回転行列
 		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
 		// MATRIX rotationMat = rotationMatY * rotationMatX; 
-		MATRIX rotationMat = rotationMatY;
+		MATRIX rotationMat = rotationMatX * rotationMatY;
 		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
 		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
 		VECTOR3 targetPos = VECTOR3(0, 250, 0) * rotationMat + postion;
@@ -95,10 +120,10 @@ void Player::Update()
 	else {
 		// 1人称視点
 		VECTOR3 playerCameraPos = VECTOR3(0, 150, 50); //相対位置：プレイヤー - (0, 350, -600)
-		MATRIX rotationMatX = MGetRotX(rotation.x); //回転行列
+		MATRIX rotationMatX = MGetRotX(cameraRotationVec.x); //回転行列
 		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
 		// MATRIX rotationMat = rotationMatY * rotationMatX; 
-		MATRIX rotationMat = rotationMatY;
+		MATRIX rotationMat = rotationMatX * rotationMatY;
 		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
 		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
 		VECTOR3 targetPos = VECTOR3(0, 150, 100) * rotationMat + postion;

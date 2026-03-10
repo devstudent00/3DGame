@@ -25,7 +25,7 @@ void Object3D::Draw() {
 	MATRIX mRotZ = MGetRotZ(rotation.z);
 	MATRIX mTrans = MGetTranslate(postion);
 	// MATRIX mat = mRotY * mTrans;
-	MATRIX mat = mRotZ * mRotY * mRotX * mTrans;
+	MATRIX mat = mRotX * mRotY * mRotZ * mTrans;
 	MV1SetMatrix(hModel, mat);
 	MV1DrawModel(hModel);
 }
