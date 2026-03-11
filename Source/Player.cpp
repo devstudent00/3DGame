@@ -29,6 +29,9 @@ Player::Player()
 	for (int i = 0; i < 5; i++) {
 		hasItemIdVector.push_back(-1);
 	}
+
+	cameraPos = VECTOR3(0, 350, -600);
+	targetPos = VECTOR3(0, 250, 0);
 }
 
 Player::~Player()
@@ -41,6 +44,7 @@ void Player::Update()
 	if (playScene->IsPause()) return;
 	VECTOR3 mouseVec = playScene->GetMouseVec();
 	
+	static float jumpVelocityY = 0.0f;
 	ChatUI* chatUI = FindGameObject<ChatUI>();
 	if (!chatUI->IsShowing()) {
 		//if (CheckHitKey(KEY_INPUT_D)) {
@@ -109,6 +113,11 @@ void Player::Update()
 				new Axe(postion);
 			}
 		}
+
+		if (Input::IsKeyOnTrig(KEY_INPUT_SPACE) && !isJumping) {
+			isJumping = true;
+			velocity.y = 50;
+		}
 	}
 
 
@@ -133,7 +142,7 @@ void Player::Update()
 		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
 		// MATRIX rotationMat = rotationMatY * rotationMatX; 
 		MATRIX rotationMat = rotationMatX * rotationMatY;
-		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
+		cameraPos = playerCameraPos * rotationMat + postion;
 		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
 		VECTOR3 targetPos = VECTOR3(0, 250, 0) * rotationMat + postion;
 		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
@@ -146,10 +155,15 @@ void Player::Update()
 		MATRIX rotationMatY = MGetRotY(rotation.y); //回転行列
 		// MATRIX rotationMat = rotationMatY * rotationMatX; 
 		MATRIX rotationMat = rotationMatX * rotationMatY;
-		VECTOR3 cameraPos = playerCameraPos * rotationMat + postion;
+		cameraPos = playerCameraPos * rotationMat + postion;
 		// VECTOR3 targetPos = VECTOR3(0, 250, 0) + postion;
-		VECTOR3 targetPos = VECTOR3(0, 150, 100) * rotationMat + postion;
+		targetPos = VECTOR3(0, 150, 100) * rotationMat + postion;
 		SetCameraPositionAndTarget_UpVecY(cameraPos, targetPos);
+	}
+
+	if (isJumping) {
+		velocity.y -= 0.5f;
+		postion.y += velocity.y;
 	}
 
 
@@ -157,7 +171,14 @@ void Player::Update()
 	Stage* stage = FindGameObject<Stage>();
 	VECTOR3 hitPos;
 	if (stage->CollideRay(postion + VECTOR3(0, 1000, 0), postion + VECTOR3(0, -1000, 0), &hitPos)) {
-		postion = hitPos; //当たってら、位置を当たった場所にする
+		if (postion.y <= hitPos.y) {
+			postion.y = hitPos.y;
+			isJumping = false;
+			velocity.y = 0;
+		}
+	}
+	else {
+		isJumping = true;
 	}
 
 	SetMousePoint(Screen::WIDTH / 2, Screen::HEIGHT / 2);

@@ -60,6 +60,19 @@ void SlotUI::Draw() {
 		DrawLine(leftX, leftY, rightX, leftY, GetColor(255, 255, 255));
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// 持っているアイテムの描画
+	Player* player = FindGameObject<Player>();
+	int item = player->GetItem(selectSlot);
+	if (item == 1) {
+		VECTOR3 offset = VECTOR3(30, 120, 30); // 手の位置っぽいオフセット
+		MATRIX rot = MGetRotY(player->GetRotation().y);
+
+		VECTOR3 pos = offset * rot + player->GetPosition();
+		MV1SetPosition(axe, pos);
+		MV1DrawModel(axe);
+	}
+
 }
 
 void SlotUI::Update() {

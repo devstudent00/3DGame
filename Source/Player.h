@@ -9,6 +9,9 @@ private:
 	int cameraSelect = 0;
 	VECTOR3 cameraRotationVec;
 	std::vector<int> hasItemIdVector;
+	VECTOR3 cameraPos;
+	VECTOR3 targetPos;
+	bool isJumping = false;
 public:
 	Player();
 	~Player();
@@ -18,4 +21,9 @@ public:
 	void RemoveItem(int itemID);
 	bool HasItem(int itemID) const;
 	int GetItem(int index) const;
+
+	int GetCameraSelect() const { return cameraSelect; }
+	VECTOR3 GetCameraRotationVec() const { return cameraRotationVec; }
+	VECTOR3 GetTargetPos() const { return targetPos; }
+	VECTOR3 GetCameraPos() const { return cameraPos; }
 };
