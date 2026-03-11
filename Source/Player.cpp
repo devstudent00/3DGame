@@ -87,15 +87,23 @@ void Player::Update()
 			//postion.z += (5.0f * cosf(rotation.y));
 
 			//velocity = VECTOR3(x, 0, z);
-			velocity = VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y);
+			// velocity = VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y);
 			//         ↑回っていないときの移動ベクトル * 回転行列
-			postion += velocity;
+			// postion += velocity;
+			// postion.x += velocity.x;
+			// postion.z += velocity.z;
+			postion += (VECTOR3(0, 0, 6.0) * MGetRotY(rotation.y));
 		}
 		if (CheckHitKey(KEY_INPUT_S)) {
 			//postion.x -= (5.0f * sinf(rotation.y));
 			//postion.z -= (5.0f * cosf(rotation.y));
-			velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
-			postion += velocity;
+			// velocity = VECTOR3(0, 0, -6.0f) * MGetRotY(rotation.y);
+			// 
+			// postion += velocity;
+			// postion.x += velocity.x;
+			// postion.z += velocity.z;
+
+			postion += (VECTOR3(0, 0, -6.0) * MGetRotY(rotation.y));
 		}
 
 		if (Input::IsKeyOnTrig(KEY_INPUT_F5)) {
@@ -116,7 +124,7 @@ void Player::Update()
 
 		if (Input::IsKeyOnTrig(KEY_INPUT_SPACE) && !isJumping) {
 			isJumping = true;
-			velocity.y = 50;
+			velocity.y = 25;
 		}
 	}
 
@@ -162,7 +170,7 @@ void Player::Update()
 	}
 
 	if (isJumping) {
-		velocity.y -= 0.5f;
+		velocity.y -= 0.5;
 		postion.y += velocity.y;
 	}
 
